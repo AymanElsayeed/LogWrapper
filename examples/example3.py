@@ -4,9 +4,12 @@ Example 3: Nested function logging levels
 
 """
 
+import logging
 from pandas import DataFrame
 from services.log_wrapper import LogWrapper
-from utils import logger
+from utils.logger import Logger
+
+logger = Logger(logger_name="example1", log_folder="logs/example1", log_level=logging.DEBUG).logger
 
 
 log_wrapper = LogWrapper(logger=logger)
@@ -24,3 +27,7 @@ def nested_function_log_levels_info_debug() -> DataFrame:
 
     data_frame = DataFrame()
     return data_frame
+
+
+if __name__ == "__main__":
+    nested_function_log_levels_info_debug()

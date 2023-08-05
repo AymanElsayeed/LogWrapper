@@ -4,10 +4,13 @@ Example 1, return type based log wrapper
 
 """
 
+import logging
 from pandas import DataFrame
 from services.log_wrapper import LogWrapper
-from utils import logger
 
+from utils.logger import Logger
+
+logger = Logger(logger_name="example1", log_folder="logs/example1", log_level=logging.DEBUG).logger
 
 log_wrapper = LogWrapper(logger=logger)
 
@@ -40,3 +43,11 @@ def function_log_level_info_tuple() -> tuple:
 def function_log_level_info_set() -> set:
     my_set = {1, 2, 3}
     return my_set
+
+
+if __name__ == "__main__":
+    function_log_level_info_df()
+    function_log_level_info_list()
+    function_log_level_info_dict()
+    function_log_level_info_tuple()
+    function_log_level_info_set()

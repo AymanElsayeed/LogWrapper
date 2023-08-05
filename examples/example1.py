@@ -8,7 +8,9 @@ import logging
 from pandas import DataFrame
 
 from services.log_wrapper import LogWrapper
-from utils import logger
+from utils.logger import Logger
+
+logger = Logger(logger_name="example1", log_folder="logs/example1", log_level=logging.DEBUG).logger
 log_wrapper = LogWrapper(logger=logger)
 
 
@@ -40,3 +42,11 @@ def function_log_level_error() -> DataFrame:
 def function_log_level_critical() -> DataFrame:
     data_frame = DataFrame()
     return data_frame
+
+
+if __name__ == "__main__":
+    function_log_level_debug()
+    function_log_level_info()
+    function_log_level_warning()
+    function_log_level_error()
+    function_log_level_critical()
