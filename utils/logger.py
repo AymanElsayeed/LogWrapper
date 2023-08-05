@@ -10,30 +10,8 @@ import pathlib
 from logging.handlers import TimedRotatingFileHandler
 
 
-__all__ = ['LoggerFilter', 'Logger', 'FunctionLoggerFilter']
+__all__ = ['LoggerFilter', 'Logger']
 LOGLEVEL = [logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR, logging.CRITICAL]
-
-
-class FunctionLoggerFilter(logging.Filter):
-    """
-    Logger filter for logging
-    Update function name for log record
-    :param func_name: function name
-    """
-
-    def __init__(self, func_name):
-        super().__init__()
-        self.func_name = func_name
-
-    def filter(self, record: logging.LogRecord):
-        """
-        Add record attributes to logging format.
-        :param record: record object
-        :type record: logging.LogRecord
-        :return: Boolean
-        """
-        record.funcName = self.func_name
-        return True
 
 
 class LoggerFilter(logging.Filter):

@@ -5,11 +5,33 @@ Log wrapper module
 """
 
 from __future__ import annotations
+import logging
 from pandas import DataFrame
 import functools
 from typing import Callable
 from collections.abc import Iterable
-from utils import logger, FunctionLoggerFilter
+
+
+class FunctionLoggerFilter(logging.Filter):
+    """
+    Logger filter for logging
+    Update function name for log record
+    :param func_name: function name
+    """
+
+    def __init__(self, func_name):
+        super().__init__()
+        self.func_name = func_name
+
+    def filter(self, record: logging.LogRecord):
+        """
+        Add record attributes to logging format.
+        :param record: record object
+        :type record: logging.LogRecord
+        :return: Boolean
+        """
+        record.funcName = self.func_name
+        return True
 
 
 class LogWrapper:
@@ -17,21 +39,22 @@ class LogWrapper:
     Log wrapper for logging
     """
 
-    def __init__(self, level=20):
+    def __init__(self, logger: logging.Logger, level=20):
 
         self.level = level
+        self.log = logger
 
         # maps integers to logging levels
 
         self._logger_levels = {
-            10: logger.debug,
-            20: logger.info,
-            30: logger.warning,
-            40: logger.error,
-            50: logger.critical
+            10: self.log.debug,
+            20: self.log.info,
+            30: self.log.warning,
+            40: self.log.error,
+            50: self.log.critical
         }
 
-        self._logger = self._logger_levels.get(level, logger.info)
+        self._logger = self._logger_levels.get(level, self.log.info)
 
     @property
     def logger(self):
@@ -39,7 +62,7 @@ class LogWrapper:
 
     @logger.setter
     def logger(self, level):
-        self._logger = self._logger_levels.get(level, logger.info)
+        self._logger = self._logger_levels.get(level, self.log.info)
 
     def data_frame_logger(self, data_frame: DataFrame):
         self.logger(f"Data Frame Shape: {data_frame.shape}")
@@ -70,7 +93,7 @@ class LogWrapper:
                 self.logger = level
                 logger_filter = FunctionLoggerFilter(func_name=function.__name__)
 
-                logger.logger.addFilter(logger_filter)
+                self.log.logger.addFilter(logger_filter)
                 start_message = f"Starting function"
                 finish_function = f"Finished function"
 
@@ -91,10 +114,10 @@ class LogWrapper:
 
                     self.logger(finish_function)
                 except Exception as ex:
-                    logger.error(f"Error in {function.__name__} function: {str(ex)}")
+                    self.log.error(f"Error in {function.__name__} function: {str(ex)}")
                     raise ex
                 finally:
-                    logger.logger.removeFilter(logger_filter)
+                    self.log.logger.removeFilter(logger_filter)
                     self.logger = old_level
 
             return wrapper

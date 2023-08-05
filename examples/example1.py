@@ -6,7 +6,10 @@ Example 1, level based log wrapper
 
 import logging
 from pandas import DataFrame
-from services import log_wrapper
+
+from services.log_wrapper import LogWrapper
+from utils import logger
+log_wrapper = LogWrapper(logger=logger)
 
 
 @log_wrapper.se_logger(log_df=False, level=10)
