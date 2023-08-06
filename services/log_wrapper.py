@@ -91,7 +91,9 @@ class LogWrapper:
                 :return: function
                 """
                 self.logger = level
-                logger_filter = FunctionLoggerFilter(func_name=function.__name__)
+                module_name = module_name = function.__module__.split(".")[-1]
+                function_name = function.__name__
+                logger_filter = FunctionLoggerFilter(func_name=f"{module_name}.{function_name}")
 
                 self.log.logger.addFilter(logger_filter)
                 start_message = f"Starting function"
