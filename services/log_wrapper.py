@@ -39,7 +39,7 @@ class LogWrapper:
     Log wrapper for logging
     """
 
-    def __init__(self, logger: logging.Logger, level=20):
+    def __init__(self, logger: logging.LoggerAdapter, level=20):
 
         self.level = level
         self.log = logger
